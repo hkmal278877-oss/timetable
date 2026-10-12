@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الرابع أ - ثانوية الذرى الذكية للمتميزين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.2);
+            --border: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        main {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* View Toggle Group */
+        .view-toggle {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .view-btn {
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* Days Selector */
+        .days-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            scrollbar-width: none;
+        }
+
+        .days-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .day-btn {
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .day-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 4px 12px var(--accent-glow);
+        }
+
+        /* Lessons List */
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .lesson-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .lesson-info h3 {
+            font-size: 1.2rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .lesson-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .lesson-meta {
+            text-align: left;
+        }
+
+        .lesson-time {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: inline-block;
+        }
+
+        .lesson-room {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* Table View */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 10px 8px;
+        }
+
+        th {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        td {
+            color: var(--text-primary);
+        }
+
+        td.subject {
+            font-weight: bold;
+        }
+
+        .holiday-msg {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<main>
+    <header>
+        <h1>جدول الرابع أ</h1>
+        <p>ثانوية الذرى الذكية للمتميزين</p>
+    </header>
+
+    <!-- أزرار تبديل طريقة العرض -->
+    <div class="view-toggle">
+        <button class="view-btn active" onclick="switchView('days')" id="btn-days">عرض الأيام</button>
+        <button class="view-btn" onclick="switchView('table')" id="btn-table">الجدول الكامل</button>
+    </div>
+
+    <!-- قسم عرض الأيام -->
+    <section id="section-days">
+        <div class="days-container" id="days-tabs"></div>
+        <div id="holiday-banner" class="holiday-msg" hidden>اليوم عطلة. استمتع بوقتك!</div>
+        <div class="lessons-list" id="lessons-list"></div>
+    </section>
+
+    <!-- قسم الجدول الكامل (جدول) -->
+    <section id="section-table" hidden>
+        <div class="table-container">
+            <table id="full-table">
+                <thead>
+                    <tr>
+                        <th>اليوم</th>
+                        <th>1<br>8:00 - 8:40</th>
+                        <th>2<br>8:45 - 9:25</th>
+                        <th>3<br>9:30 - 10:10</th>
+                        <th>4<br>10:15 - 10:55</th>
+                        <th>5<br>11:00 - 11:40</th>
+                        <th>6<br>11:45 - 12:25</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<script>
+    // بيانات الجدول مع تحديث أرقام القاعات والمواد
+    const timetableData = {
+        "الأحد": [
+            { time: "8:00 - 8:40", subject: "رياضيات", teacher: "سامر بشير", room: "ق. الرياضيات ٢" },
+            { time: "8:45 - 9:25", subject: "عربي", teacher: "علي عبود", room: "ق. العربية ٣" },
+            { time: "9:30 - 10:10", subject: "انكليزي", teacher: "حسن ياسر", room: "ق. الانكليزية ٢" },
+            { time: "10:15 - 10:55", subject: "مكتبة", teacher: "هادي جميل", room: "مكتبة" },
+            { time: "11:00 - 11:40", subject: "حاسوب", teacher: "عبدالله صاحب", room: "م. الحاسوب" },
+            { time: "11:45 - 12:25", subject: "كيمياء", teacher: "هشام فاضل", room: "ق. الكيمياء ١" }
+        ],
+        "الاثنين": [
+            { time: "8:00 - 8:40", subject: "رياضيات", teacher: "سامر بشير", room: "ق. الرياضيات ٣" },
+            { time: "8:45 - 9:25", subject: "فنية", teacher: "أبي ذر ماجد", room: "ق. الفنية" },
+            { time: "9:30 - 10:10", subject: "عربي", teacher: "علي عبود", room: "ق. العربية ١" },
+            { time: "10:15 - 10:55", subject: "انكليزي", teacher: "حسن ياسر", room: "ق. الانكليزية ٤" },
+            { time: "11:00 - 11:40", subject: "احياء", teacher: "علي عبدالمهدي", room: "ق. الاسلامية ١" },
+            { time: "11:45 - 12:25", subject: "فيزياء", teacher: "حيدر عامر", room: "ق. الانكليزية ٤" }
+        ],
+        "الثلاثاء": [
+            { time: "8:00 - 8:40", subject: "احياء", teacher: "علي عبدالمهدي", room: "ق. الاسلامية ١" },
+            { time: "8:45 - 9:25", subject: "عربي", teacher: "علي عبود", room: "ق. العربية ٣" },
+            { time: "9:30 - 10:10", subject: "انكليزي", teacher: "حسن ياسر", room: "ق. الانكليزية ٤" },
+            { time: "10:15 - 10:55", subject: "فرنسي", teacher: "علي محسن", room: "ق. الفرنسية" },
+            { time: "11:00 - 11:40", subject: "اسلامية", teacher: "سيد فراس", room: "ق. الاسلامية ٢" },
+            { time: "11:45 - 12:25", subject: "رياضيات", teacher: "سامر بشير", room: "ق. الرياضيات ٢" }
+        ],
+        "الأربعاء": [
+            { time: "8:00 - 8:40", subject: "عربي", teacher: "علي عبود", room: "ق. العربية ٢" },
+            { time: "8:45 - 9:25", subject: "حاسوب", teacher: "عبدالله صاحب", room: "م. الحاسوب" },
+            { time: "9:30 - 10:10", subject: "رياضيات", teacher: "سامر بشير", room: "قاعة الرياضيات ٤" },
+            { time: "10:15 - 10:55", subject: "رياضة", teacher: "-", room: "ساحة" },
+            { time: "11:00 - 11:40", subject: "اسلامية", teacher: "سيد فراس", room: "ق. الاسلامية ١" },
+            { time: "11:45 - 12:25", subject: "انكليزي", teacher: "حسن ياسر", room: "ق. الانكليزية ٤" }
+        ],
+        "الخميس": [
+            { time: "8:00 - 8:40", subject: "احياء", teacher: "علي عبدالمهدي", room: "ق. الاحياء ١" },
+            { time: "8:45 - 9:25", subject: "انكليزي", teacher: "حسن ياسر", room: "ق. الانكليزية ٢" },
+            { time: "9:30 - 10:10", subject: "جرائم البعث", teacher: "عامر عبدالرزاق", room: "ق. الاجتماعيات ٢" },
+            { time: "10:15 - 10:55", subject: "عربي", teacher: "علي عبود", room: "ق. العربية ٣" },
+            { time: "11:00 - 11:40", subject: "فيزياء", teacher: "حيدر عامر", room: "ق. الفيزياء ١" },
+            { time: "11:45 - 12:25", subject: "كيمياء", teacher: "هشام فاضل", room: "ق. الكيمياء ١" }
+        ]
+    };
+
+    const days = Object.keys(timetableData);
+
+    function getCurrentDay() {
+        const d = new Date().getDay();
+        const map = { 0: "الأحد", 1: "الاثنين", 2: "الثلاثاء", 3: "الأربعاء", 4: "الخميس", 5: "الأحد", 6: "الأحد" };
+        return map[d] || "الأحد";
+    }
+
+    let activeDay = getCurrentDay();
+
+    function renderDaysTabs() {
+        const container = document.getElementById('days-tabs');
+        container.innerHTML = '';
+        days.forEach(day => {
+            const btn = document.createElement('button');
+            btn.className = `day-btn ${day === activeDay ? 'active' : ''}`;
+            btn.innerText = day;
+            btn.onclick = () => {
+                activeDay = day;
+                renderDaysTabs();
+                renderDayLessons();
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function renderDayLessons() {
+        const list = document.getElementById('lessons-list');
+        const banner = document.getElementById('holiday-banner');
+        list.innerHTML = '';
+
+        const dayIndex = new Date().getDay();
+        if ((dayIndex === 5 || dayIndex === 6) && activeDay === getCurrentDay()) {
+            banner.hidden = false;
+        } else {
+            banner.hidden = true;
+        }
+
+        const lessons = timetableData[activeDay] || [];
+        lessons.forEach(l => {
+            const card = document.createElement('div');
+            card.className = 'lesson-card';
+            card.innerHTML = `
+                <div class="lesson-info">
+                    <h3>${l.subject}</h3>
+                    <p>الأستاذ: ${l.teacher}</p>
+                </div>
+                <div class="lesson-meta">
+                    <span class="lesson-time">${l.time}</span>
+                    <div class="lesson-room">${l.room}</div>
+                </div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function renderTable() {
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+        days.forEach(day => {
+            const tr = document.createElement('tr');
+            let html = `<th>${day}</th>`;
+            const lessons = timetableData[day];
+            lessons.forEach(l => {
+                html += `<td class="subject">${l.subject}<br><small style="color:var(--text-secondary);">${l.teacher}</small></td>`;
+            });
+            tr.innerHTML = html;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function switchView(view) {
+        const btnDays = document.getElementById('btn-days');
+        const btnTable = document.getElementById('btn-table');
+        const secDays = document.getElementById('section-days');
+        const secTable = document.getElementById('section-table');
+
+        if (view === 'days') {
+            btnDays.classList.add('active');
+            btnTable.classList.remove('active');
+            secDays.hidden = false;
+            secTable.hidden = true;
+        } else {
+            btnTable.classList.add('active');
+            btnDays.classList.remove('active');
+            secTable.hidden = false;
+            secDays.hidden = true;
+        }
+    }
+
+    renderDaysTabs();
+    renderDayLessons();
+    renderTable();
+</script>
+
+</body>
+</html>
